@@ -1,51 +1,72 @@
 package org.example;
 
-import Model.Pokemon;
+import Controller.PokemonController;
+import Controller.TreinadorController;
+import View.PokemonForm;
 
 import javax.swing.*;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Main {
-    private static List<Pokemon> listaPokemon = new ArrayList<>();
-    private static JMenuBar menuBar = new JMenuBar();
-    private static JMenuItem itemInserirListaPokemon = new JMenuItem("Inserir Lista de Pokémons");
+public class Main extends JFrame {
+
+    private JDesktopPane desktopPane;
+    private PokemonController pokemonController;
+    private TreinadorController treinadorController;
+
+    public Main() {
+        super("Sistema de Gerenciamento de Pokémons");
+        this.pokemonController = new PokemonController();
+        this.treinadorController = new TreinadorController();
+
+        setSize(1000, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        desktopPane = new JDesktopPane();
+        setContentPane(desktopPane);
+
+        createMenuBar();
+    }
+
+    private void createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        // Menu Pokémons
+        JMenu menuPokemons = new JMenu("Pokémons");
+        JMenuItem itemCadastrarPokemon = new JMenuItem("Cadastrar Pokémon");
+        JMenuItem itemListarPokemons = new JMenuItem("Listar Pokémons");
+
+        itemCadastrarPokemon.addActionListener(e -> openPokemonForm(null));
+
+        menuPokemons.add(itemCadastrarPokemon);
+        menuPokemons.add(itemListarPokemons);
+        menuBar.add(menuPokemons);
+
+     ;
+
+
+
+
+        // Menu Sair
+        JMenu menuSair = new JMenu("Sair");
+        JMenuItem itemSair = new JMenuItem("Sair do Sistema");
+        itemSair.addActionListener(e -> System.exit(0));
+        menuSair.add(itemSair);
+        menuBar.add(menuSair);
+
+        setJMenuBar(menuBar);
+    }
+
+    // Abre o formulário de Pokémon
+    private void openPokemonForm(PokemonForm existingForm) {
+        PokemonForm form = new PokemonForm(pokemonController);
+        desktopPane.add(form);
+        form.setVisible(true);
+    }
+
+
+
 
     public static void main(String[] args) {
-        inicializarPokemons();
-
-        itemInserirListaPokemon.addActionListener(e -> {
-            try {
-                insereListaPokemons();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        menuBar.add(itemInserirListaPokemon);
-
-        // Exemplo de interface (opcional)
-        JFrame frame = new JFrame("Pokémon App");
-        frame.setJMenuBar(menuBar);
-        frame.setSize(400, 300);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-
-    private static void inicializarPokemons() {
-        listaPokemon.add(new Pokemon("Bulbasaur", "Planta", "Veneno", 5, 15));
-        listaPokemon.add(new Pokemon("Ivysaur", "Planta", "Veneno", 16, 48));
-        listaPokemon.add(new Pokemon("Venusaur", "Planta", "Veneno", 36, 108));
-        listaPokemon.add(new Pokemon("Charmander", "Fogo", null, 5, 15));
-        // [... continue adicionando todos os outros pokémons ...]
-        listaPokemon.add(new Pokemon("Mewtwo", "Psíquico", null, 70, 210));
-        listaPokemon.add(new Pokemon("Mew", "Psíquico", null, 50, 150));
-    }
-
-    private static void insereListaPokemons() throws SQLException {
-        for (Pokemon p : listaPokemon) {
-            System.out.println(p); 
-        }
+        SwingUtilities.invokeLater(() -> new Main().setVisible(true));
     }
 }

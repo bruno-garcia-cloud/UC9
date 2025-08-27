@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConexaoPostgresDB {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/Pokemon";
+    private static final String URL = "jdbc:postgresql://localhost:5432/PokeCenter";
     private static final String USUARIO = "postgres"; // O usuário que configuramos
     private static final String SENHA = "root"; // A senha que configuramos
 
